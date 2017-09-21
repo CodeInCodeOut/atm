@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.dayuanit.atm.mapper.UserMapper">
+
+	<resultMap id="userResultMap" type="user">
+		<id property="id" column="id"/>
+		<result property="userName" column="user_name"/>
+		<result property="password" column="password"/>
+		<result property="email" column="email"/>
+		<result property="createTime" column="create_time"/>	
+	</resultMap>
+	
+	<sql id="atm_user_filed">
+	id, user_name, password, create_time, email
+	</sql>
+	
+	<insert id="add" parameterType="user" useGeneratedKeys="true" keyProperty="id">
+	 insert into atm_user (user_name, password, create_time, email)
+	 value(#{userName}, #{password}, now(), #{email});
+	</insert>
+	
+	<!-- 设置 useGeneratedKeys="true" ，用keyProperty 去指定主键名称 主键返回到note中的id -->
+	
+	
+	<select id="query" parameterType="string" resultMap="userResultMap">
+		 select <include refid="atm_user_filed"></include> from atm_user 
+		 where user_name = #{userName};	
+	</select>
+	
+	<select id="queryById" parameterType="int" resultMap="userResultMap">
+		 select <include refid="atm_user_filed"></include> from atm_user 
+		 where id = #{userId};	
+	</select>
+
+</mapper>
+

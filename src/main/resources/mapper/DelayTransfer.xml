@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.dayuanit.atm.mapper.DelayTransferMapper">
+
+	<resultMap id="delayTransferResultMap" type="delayTransfer">
+		<id property="id" column="id"/>
+		<result property="outCardNum" column="out_card_num"/>
+		<result property="outCardId" column="out_card_id"/>
+		<result property="amount" column="amount"/>
+		<result property="inCardId" column="in_card_id"/>
+		<result property="inCardNum" column="in_card_num"/>
+		<result property="transactionStatus" column="transaction_status"/>
+		<result property="createTime" column="create_time"/>
+		<result property="modifyTime" column="modify_time"/>
+	</resultMap>
+	
+	<sql id="atm_delay_transfer_filed">
+		id, out_card_num, out_card_id, create_time, modify_time, amount, transaction_status,
+		in_card_id, in_card_num
+	</sql>
+	
+	<insert id="addDelayTransfer" parameterType="delayTransfer" useGeneratedKeys="true" keyProperty="id">
+		insert into atm_delay_transfer(out_card_num, out_card_id, transaction_status, create_time, modify_time,
+		in_card_id, in_card_num, amount) 
+		value(#{outCardNum}, #{outCardId}, #{transactionStatus}, now(), now(), #{inCardId}, #{inCardNum}, #{amount});
+	</insert>
+	
+	<select id="transferInCard" resultMap="delayTransferResultMap">
+		select <include refid="atm_delay_transfer_filed"></include> 
+		from atm_delay_transfer where transaction_status="1";
+	</select>
+	
+	<update id="updateStatus" parameterType="delayTransfer">
+		update atm_delay_transfer set transaction_status= #{transactionStatus} where transaction_status="1" and id=#{id};
+	</update>
+	
+	<select id="getTransferByInCardNumStatus" parameterType="delayTransfer" resultMap="delayTransferResultMap">
+		select <include refid="atm_delay_transfer_filed"></include> 
+		from atm_delay_transfer where transaction_status=#{transactionStatus} and in_card_num=#{inCardNum};
+	</select>
+	
+	<select id="getTransferByOutCardForUpdate" parameterType="delayTransfer" resultMap="delayTransferResultMap">
+		select <include refid="atm_delay_transfer_filed"></include> 
+		from atm_delay_transfer where transaction_status=#{transactionStatus} and out_card_num=#{outCardNum} for update;
+	</select>
+
+</mapper>
+

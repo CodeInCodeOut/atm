@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.dayuanit.atm.mapper.DetailMapper">
+
+	<resultMap id="detailResultMap" type="detail">
+		<id property="id" column="id"/>
+		<result property="cardNum" column="card_num"/>
+		<result property="amount" column="amount"/>
+		<result property="status" column="status"/>
+		<result property="optType" column="opt_type"/>
+		<result property="createTime" column="create_time"/>
+		<result property="userId" column="user_id"/>
+		<result property="flowDesc" column="flow_desc"/>
+	</resultMap>
+	
+	<sql id="atm_detail_filed">
+	id, card_num, amount, opt_type, create_time, user_id, flow_desc, status
+	</sql>
+	
+	<insert id="addDetail" parameterType="card" useGeneratedKeys="true" keyProperty="id">
+		insert into atm_detail(card_num, amount, opt_type, create_time, user_id, flow_desc, status) 
+		value(#{cardNum}, #{amount}, #{optType}, now(), #{userId}, #{flowDesc}, #{status});
+	</insert>
+	
+	  <select id="getDetailByCardNum" parameterType="HashMap" resultMap="detailResultMap">
+		select <include refid="atm_detail_filed"></include>
+		from atm_detail where card_num=#{cardNum} order by id desc limit #{startNum}, #{detailSize};	 
+	 </select>
+	 
+	 <select id="getAllDetailByCardNum" parameterType="HashMap" resultMap="detailResultMap">
+		select <include refid="atm_detail_filed"></include>
+		from atm_detail where card_num=#{cardNum} and user_id=#{userId} order by id desc;	 
+	 </select>
+	 
+	  <select id="getCardDetailTotal"  parameterType="HashMap" resultType= "int">
+		select count(id) from atm_detail where card_num = #{cardNum};
+	 </select>
+	 
+
+</mapper>
+

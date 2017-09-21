@@ -1,0 +1,17 @@
+<!DOCTYPE configuration
+PUBLIC "-//mybatis.org//DTD Config 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-config.dtd">
+<configuration>
+
+	<!-- 定义 别名 -->
+	<typeAliases>
+		
+		<typeAlias type="com.dayuanit.atm.domain.User" alias="user"/>
+		<typeAlias type="com.dayuanit.atm.domain.Card" alias="card"/>
+		<typeAlias type="com.dayuanit.atm.domain.Detail" alias="detail"/>
+		<typeAlias type="com.dayuanit.atm.domain.DelayTransfer" alias="delayTransfer"/>
+	</typeAliases>
+
+
+
+</configuration>
